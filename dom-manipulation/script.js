@@ -70,13 +70,13 @@ async function addQuote() {
         throw new Error('Network response was not ok');
       }
 
-      alert('New quote added and posted to the server successfully!');
+      showNotification('New quote added and posted to the server successfully!');
     } catch (error) {
       console.error('Error posting data to server:', error);
-      alert('Error posting data to the server. Please try again.');
+      showNotification('Error posting data to the server. Please try again.');
     }
   } else {
-    alert('Please enter both quote text and category.');
+    showNotification('Please enter both quote text and category.');
   }
 }
 
@@ -101,7 +101,7 @@ function importFromJsonFile(event) {
     quotes.push(...importedQuotes);
     saveQuotes();
     populateCategories(); // Update categories after importing new quotes
-    alert('Quotes imported successfully!');
+    showNotification('Quotes imported successfully!');
   };
   fileReader.readAsText(event.target.files[0]);
 }
@@ -169,10 +169,10 @@ async function syncQuotes() {
       });
     }
 
-    alert('Quotes synchronized with the server successfully!');
+    showNotification('Quotes synchronized with the server successfully!');
   } catch (error) {
     console.error('Error synchronizing quotes with server:', error);
-    alert('Error synchronizing quotes with the server. Please try again.');
+    showNotification('Error synchronizing quotes with the server. Please try again.');
   }
 }
 
@@ -183,13 +183,26 @@ function resolveConflicts(serverQuotes) {
     quotes = serverQuotes; // Overwrite local quotes with server quotes
     saveQuotes(); // Save the resolved quotes to local storage
     populateCategories(); // Update category dropdown
-    alert('Data updated from the server.');
+    showNotification('Data updated from the server.');
   }
 }
 
 // Function to periodically check for new quotes from the server
 function startPeriodicSync() {
   setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+}
+
+// Function to show notifications
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  // Automatically remove notification after 5 seconds
+  setTimeout(() => {
+    document.body.removeChild(notification);
+  }, 5000);
 }
 
 // Add event listeners
