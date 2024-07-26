@@ -73,6 +73,7 @@ function importFromJsonFile(event) {
 
 // Add event listeners
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+document.getElementById('exportQuotes').addEventListener('click', exportToJsonFile);
 
 // Initial call to display a quote when the page loads
 showRandomQuote();
@@ -86,16 +87,3 @@ if (lastQuote) {
   const quoteDisplay = document.getElementById('quoteDisplay');
   quoteDisplay.innerHTML = `<p>${lastQuote.text}</p><p><em>${lastQuote.category}</em></p>`;
 }
-
-// Create and append export and import elements
-const exportButton = document.createElement('button');
-exportButton.textContent = 'Export Quotes';
-exportButton.addEventListener('click', exportToJsonFile);
-document.body.appendChild(exportButton);
-
-const importInput = document.createElement('input');
-importInput.type = 'file';
-importInput.id = 'importFile';
-importInput.accept = '.json';
-importInput.onchange = importFromJsonFile;
-document.body.appendChild(importInput);
