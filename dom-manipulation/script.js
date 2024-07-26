@@ -169,7 +169,7 @@ async function syncQuotes() {
       });
     }
 
-    showNotification('Quotes synchronized with the server successfully!');
+    showNotification('Quotes synced with server successfully!');
   } catch (error) {
     console.error('Error synchronizing quotes with server:', error);
     showNotification('Error synchronizing quotes with the server. Please try again.');
