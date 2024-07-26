@@ -1,3 +1,5 @@
+const API_URL = 'https://jsonplaceholder.typicode.com/posts'; // Mock API for demonstration purposes
+
 // Load quotes from local storage
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   { text: "The best way to predict the future is to create it.", category: "Motivation" },
@@ -115,6 +117,34 @@ function filterQuotes() {
   showRandomQuote();
 }
 
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(API_URL);
+    const serverQuotes = await response.json();
+    resolveConflicts(serverQuotes); // Handle conflicts between local and server data
+  } catch (error) {
+    console.error('Error fetching data from server:', error);
+  }
+}
+
+// Function to sync local quotes with the server
+function syncWithServer() {
+  // Periodically fetch server data
+  setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+}
+
+// Function to handle conflicts between local and server data
+function resolveConflicts(serverQuotes) {
+  // Example conflict resolution: server data takes precedence
+  if (serverQuotes.length > 0) {
+    quotes = serverQuotes; // Overwrite local quotes with server quotes
+    saveQuotes(); // Save the resolved quotes to local storage
+    populateCategories(); // Update category dropdown
+    alert('Data updated from the server.');
+  }
+}
+
 // Add event listeners
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 document.getElementById('exportQuotes').addEventListener('click', exportToJsonFile);
@@ -132,3 +162,6 @@ if (lastQuote) {
   const quoteDisplay = document.getElementById('quoteDisplay');
   quoteDisplay.innerHTML = `<p>${lastQuote.text}</p><p><em>${lastQuote.category}</em></p>`;
 }
+
+// Start syncing with the server
+syncWithServer();
