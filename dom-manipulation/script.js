@@ -148,10 +148,32 @@ async function fetchQuotesFromServer() {
   }
 }
 
-// Function to sync local quotes with the server
-function syncWithServer() {
-  // Periodically fetch server data
-  setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+// Function to synchronize local quotes with the server
+async function syncQuotes() {
+  try {
+    // Fetch current server quotes
+    const response = await fetch(API_URL);
+    const serverQuotes = await response.json();
+
+    // Resolve conflicts and update local quotes
+    resolveConflicts(serverQuotes);
+
+    // Optionally, send local updates to the server
+    for (const quote of quotes) {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quote),
+      });
+    }
+
+    alert('Quotes synchronized with the server successfully!');
+  } catch (error) {
+    console.error('Error synchronizing quotes with server:', error);
+    alert('Error synchronizing quotes with the server. Please try again.');
+  }
 }
 
 // Function to handle conflicts between local and server data
@@ -168,6 +190,7 @@ function resolveConflicts(serverQuotes) {
 // Add event listeners
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 document.getElementById('exportQuotes').addEventListener('click', exportToJsonFile);
+document.getElementById('importFile').addEventListener('change', importFromJsonFile);
 
 // Initial call to display a quote and populate categories when the page loads
 populateCategories();
@@ -184,4 +207,4 @@ if (lastQuote) {
 }
 
 // Start syncing with the server
-syncWithServer();
+syncQuotes();
