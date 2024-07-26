@@ -70,7 +70,8 @@ async function addQuote() {
         throw new Error('Network response was not ok');
       }
 
-      showNotification('Quote added and posted to the server.');
+      // Alert added here
+      alert('Quotes synced with server!');
     } catch (error) {
       console.error('Error posting data to server:', error);
       showNotification('Error posting data to the server.');
@@ -169,7 +170,8 @@ async function syncQuotes() {
       });
     }
 
-    showNotification('Quotes have been synced.');
+    // Alert added here
+    alert('Quotes synced with server!');
   } catch (error) {
     console.error('Error synchronizing quotes with server:', error);
     showNotification('Sync error.');
