@@ -187,6 +187,11 @@ function resolveConflicts(serverQuotes) {
   }
 }
 
+// Function to periodically check for new quotes from the server
+function startPeriodicSync() {
+  setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+}
+
 // Add event listeners
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 document.getElementById('exportQuotes').addEventListener('click', exportToJsonFile);
@@ -208,3 +213,6 @@ if (lastQuote) {
 
 // Start syncing with the server
 syncQuotes();
+
+// Start periodic syncing
+startPeriodicSync();
