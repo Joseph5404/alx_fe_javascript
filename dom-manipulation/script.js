@@ -70,10 +70,10 @@ async function addQuote() {
         throw new Error('Network response was not ok');
       }
 
-      showNotification('New quote added and posted to the server successfully!');
+      showNotification('Quote added and posted to the server.');
     } catch (error) {
       console.error('Error posting data to server:', error);
-      showNotification('Error posting data to the server. Please try again.');
+      showNotification('Error posting data to the server.');
     }
   } else {
     showNotification('Please enter both quote text and category.');
@@ -101,7 +101,7 @@ function importFromJsonFile(event) {
     quotes.push(...importedQuotes);
     saveQuotes();
     populateCategories(); // Update categories after importing new quotes
-    showNotification('Quotes imported successfully!');
+    showNotification('Quotes imported successfully.');
   };
   fileReader.readAsText(event.target.files[0]);
 }
@@ -169,10 +169,10 @@ async function syncQuotes() {
       });
     }
 
-    showNotification('Quotes synced with server successfully!');
+    showNotification('Quotes have been synced.');
   } catch (error) {
     console.error('Error synchronizing quotes with server:', error);
-    showNotification('Error synchronizing quotes with the server. Please try again.');
+    showNotification('Sync error.');
   }
 }
 
@@ -183,7 +183,7 @@ function resolveConflicts(serverQuotes) {
     quotes = serverQuotes; // Overwrite local quotes with server quotes
     saveQuotes(); // Save the resolved quotes to local storage
     populateCategories(); // Update category dropdown
-    showNotification('Data updated from the server.');
+    showNotification('Data updated from server.');
   }
 }
 
