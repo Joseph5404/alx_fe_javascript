@@ -44,17 +44,37 @@ function createAddQuoteForm() {
 }
 
 // Function to add a new quote
-function addQuote() {
+async function addQuote() {
   const newQuoteText = document.getElementById('newQuoteText').value;
   const newQuoteCategory = document.getElementById('newQuoteCategory').value;
 
   if (newQuoteText && newQuoteCategory) {
-    quotes.push({ text: newQuoteText, category: newQuoteCategory });
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
+    quotes.push(newQuote);
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
     saveQuotes();
     populateCategories(); // Update categories after adding a new quote
-    alert('New quote added successfully!');
+
+    // Post the new quote to the server
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newQuote),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      alert('New quote added and posted to the server successfully!');
+    } catch (error) {
+      console.error('Error posting data to server:', error);
+      alert('Error posting data to the server. Please try again.');
+    }
   } else {
     alert('Please enter both quote text and category.');
   }
